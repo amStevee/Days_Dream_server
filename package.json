@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.js",
+    "build": "npm run build",
     "test": "npm test"
   },
   "author": "Steven .A. Anongo",
