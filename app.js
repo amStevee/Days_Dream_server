@@ -52,7 +52,7 @@ app.use("/api/v1/user", users);
 app.use("/api/v1/posts", posts);
 
 app.all("*", (req, res) => {
-  res.status(404).json("Page not found");
+  res.status(404).json("routh not found, please use /api/v1/posts");
 });
 
 app.listen(port, () => {
