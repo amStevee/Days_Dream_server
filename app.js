@@ -9,7 +9,7 @@ const multer = require("multer");
 const auths = require("./routes/auth");
 const users = require("./routes/users");
 const posts = require("./routes/posts");
-const port = 5000;
+const port = process.env.PORT || 3001;
 dotenv.config();
 let dir = path.join(__dirname, "uploads");
 
@@ -55,6 +55,6 @@ app.all("*", (req, res) => {
   res.status(404).json("Page not found");
 });
 
-app.listen(process.env.PORT || port, () => {
+app.listen(port, () => {
   console.log(`server is running on ${port}`);
 });
