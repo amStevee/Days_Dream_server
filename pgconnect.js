@@ -4,7 +4,7 @@ dotenv.config();
 
 const pool = new Pool({
   user: "days_dream_db_user",
-  host: "dpg-cfq07gcgqg41dhrsra4g-a",
+  host: "dpg-cfq07gcgqg41dhrsra4g-a.oregon-postgres.render.com",
   database: "days_dream_db",
   password: "kFDYpsVkVqUCixS41ECSwjTiJB4j1WqZ",
   port: 5432,
