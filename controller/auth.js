@@ -96,7 +96,6 @@ const login = async (req, res, next) => {
     const token = jwt.sign(
       {
         id: user.rows[0].id,
-        isadmin: user.rows[0].isadmin,
       },
       process.env.JWT,
       { expiresIn: "24h" }
