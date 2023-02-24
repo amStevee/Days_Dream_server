@@ -48,6 +48,7 @@ const addPosts = async (req, res) => {
 };
 
 const deletePosts = async (req, res) => {
+  console.log("deletpost Cookies: ", req.cookies);
   const token = req.cookies.access_token;
   console.log(token);
   if (!token) return res.status(401).json("Not auntenticated");
