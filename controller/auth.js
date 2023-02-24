@@ -81,7 +81,7 @@ const login = async (req, res, next) => {
 
 const logout = (req, res) => {
   res
-    .clearCookie("access_token", {
+    .clearCookie("jwt", {
       sameSite: "none",
       secure: true,
     })
