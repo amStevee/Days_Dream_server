@@ -3,8 +3,6 @@ const createError = require("../utils/error");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
-const dotenv = require("dotenv");
-dotenv.config();
 
 const register = (req, res, next) => {
   console.log(req.body);
