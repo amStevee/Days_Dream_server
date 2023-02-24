@@ -14,7 +14,7 @@ dotenv.config();
 let dir = path.join(__dirname, "uploads");
 
 app.use(morgan("dev"));
-app.use(cookieParser());
+app.use(cookieParser(process.env.JWTHASH));
 app.use(cors());
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");

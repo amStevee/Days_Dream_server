@@ -65,13 +65,14 @@ const login = async (req, res, next) => {
     });
     const { password, ...others } = isUser.rows[0];
 
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    });
     console.log("login Cookies: ", req.cookies);
-    res.status(200).json({ ...others });
+    res
+      .status(200)
+      .cookie("jwt", token, {
+        httpOnly: true,
+        secure: true,
+      })
+      .json({ ...others });
   } catch (error) {
     next(createError(401, "invalid cridentials", error.stack));
   }
