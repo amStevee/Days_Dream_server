@@ -60,15 +60,13 @@ const login = async (req, res, next) => {
     if (!cPassword) {
       return res.status(400).json({ msg: "incorrect username or password" });
     }
-    const token = jwt.sign({ id: isUser.rows[0].id }, process.env.JWTHASH, {
+    const token = jwt.sign({ id: isUser.rows[0].userid }, process.env.JWTHASH, {
       expiresIn: "24h",
     });
     const { password, ...others } = isUser.rows[0];
 
     res
-      .cookie("jwt", token, {
-        httpOnly: true,
-      })
+      .cookie("access_token", token, { httpOnly: true })
       .status(200)
       .json({ ...others });
   } catch (error) {
