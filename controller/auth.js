@@ -77,18 +77,16 @@ const register = (req, res, next) => {
 // };
 
 const login = async (req, res, next) => {
-  const { username, passwords } = req.body;
+  const q = "SELECT * FROM users WHERE username = $1";
 
   try {
-    const user = await pool.query("SELECT * FROM users WHERE username = $1", [
-      username,
-    ]);
+    const user = await pool.query(q, [req.body.username]);
     if (!user) {
-      return next(createError(404, "user not found"));
+      return res.status(404).json({ msg: "usernot found" });
     }
 
     const passwordCompare = await bcrypt.compare(
-      passwords,
+      req.body.password,
       user.rows[0].password
     );
 
