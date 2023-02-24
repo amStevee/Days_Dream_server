@@ -69,9 +69,14 @@ const login = async (req, res, next) => {
     const { password, ...others } = isUser.rows[0];
 
     res
-      .cookie("access_token", token, { httpOnly: true })
+      .cookie("access_token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      })
       .status(200)
       .json({ ...others });
+    next();
   } catch (error) {
     next(createError(401, "invalid cridentials", error.stack));
   }
