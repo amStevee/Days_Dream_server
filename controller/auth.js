@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const { v4: uuidv4 } = require("uuid");
 
 const register = (req, res, next) => {
-  console.log(req.body);
   // CHECK EXISTING user
   const q = "SELECT * FROM users WHERE email = $1 OR username = $2";
   pool.query(q, [req.body.input.email, req.body.input.name], (err, data) => {
@@ -61,7 +60,7 @@ const login = async (req, res, next) => {
     if (!cPassword) {
       return res.status(400).json({ msg: "incorrect username or password" });
     }
-    const token = jwt.sign({ id: isUser.rows[0].id }, "Y2FsbWFudmluZ2FuemE", {
+    const token = jwt.sign({ id: isUser.rows[0].id }, process.env.JWTHASH, {
       expiresIn: "24h",
     });
     const { password, ...others } = isUser.rows[0];

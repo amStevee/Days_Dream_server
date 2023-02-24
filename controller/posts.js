@@ -48,12 +48,11 @@ const addPosts = async (req, res) => {
 };
 
 const deletePosts = async (req, res) => {
-  console.log("deletpost Cookies: ", req.cookies);
-  const token = req.cookies.access_token;
+  const token = req.cookies.jwt;
   console.log(token);
   if (!token) return res.status(401).json("Not auntenticated");
 
-  jwt.verify(token, "Y2FsbWFudmluZ2FuemE", async (err, data) => {
+  jwt.verify(token, process.env.JWTHASH, async (err, data) => {
     if (err) return res.status(403).json({ msg: "token not valid" });
 
     const postId = req.params.id;
@@ -69,7 +68,28 @@ const deletePosts = async (req, res) => {
 };
 
 const updatePosts = async (req, res) => {
-  res.status(200).json({ title: "This is a updatePosts" });
+  const token = req.cookies.jwt;
+  const { userid, title, description, category, image } = req.body;
+  if (!token) return res.status(401).json("Not auntenticated");
+
+  jwt.verify(token, process.env.JWTHASH, async (err, data) => {
+    if (err) return res.status(403).json({ msg: "token not valid" });
+
+    const postId = req.params.id;
+
+    const q =
+      "UPDATE posts SET title = $1, description = $2, image = $3, userid = $4, category = $5 WHERE id = $6";
+    await pool.query(
+      q,
+      [title, description, image, userid, category, postId],
+      (err, qdata) => {
+        if (err) {
+          return res.status(400).json({ msg: "You can not update this post" });
+        }
+        res.status(200).json({ msg: "Post has been updated successfully" });
+      }
+    );
+  });
 };
 
 module.exports = { getPosts, getPost, addPosts, deletePosts, updatePosts };
