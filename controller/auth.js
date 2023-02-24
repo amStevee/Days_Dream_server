@@ -40,38 +40,75 @@ const register = (req, res, next) => {
   });
 };
 
+// const login = async (req, res, next) => {
+//   const q = "SELECT * FROM users WHERE username = $1";
+//   try {
+//     const isUser = await pool.query(q, [req.body.username]);
+
+//     if (!isUser.rows[0]) return res.status(404).json({ msg: "usernot found" });
+//     if (req.body.username === {} || req.body.password === {}) {
+//       return res
+//         .status(400)
+//         .json({ msg: "please fill out the fileds in other to login" });
+//     }
+
+//     // COMPARE PASSWORD
+//     const cPassword = await bcrypt.compare(
+//       req.body.password,
+//       isUser.rows[0].password
+//     );
+//     if (!cPassword) {
+//       return res.status(400).json({ msg: "incorrect username or password" });
+//     }
+//     const token = jwt.sign({ id: isUser.rows[0].id }, process.env.JWTHASH, {
+//       expiresIn: "24h",
+//     });
+//     const { password, ...others } = isUser.rows[0];
+
+//     res
+//       .cookie("jwt", token, {
+//         httpOnly: true,
+//       })
+//       .status(200)
+//       .json({ ...others });
+//   } catch (error) {
+//     next(createError(401, "invalid cridentials", error.stack));
+//   }
+// };
+
 const login = async (req, res, next) => {
-  const q = "SELECT * FROM users WHERE username = $1";
+  const { username, passwords } = req.body;
+
   try {
-    const isUser = await pool.query(q, [req.body.username]);
-
-    if (!isUser.rows[0]) return res.status(404).json({ msg: "usernot found" });
-    if (req.body.username === {} || req.body.password === {}) {
-      return res
-        .status(400)
-        .json({ msg: "please fill out the fileds in other to login" });
+    const user = await pool.query("SELECT * FROM users WHERE username = $1", [
+      username,
+    ]);
+    if (!user) {
+      return next(createError(404, "user not found"));
     }
 
-    // COMPARE PASSWORD
-    const cPassword = await bcrypt.compare(
-      req.body.password,
-      isUser.rows[0].password
+    const passwordCompare = await bcrypt.compare(
+      passwords,
+      user.rows[0].password
     );
-    if (!cPassword) {
-      return res.status(400).json({ msg: "incorrect username or password" });
-    }
-    const token = jwt.sign({ id: isUser.rows[0].id }, process.env.JWTHASH, {
-      expiresIn: "24h",
-    });
-    const { password, ...others } = isUser.rows[0];
 
-    console.log("login Cookies: ", req.cookies);
+    if (!passwordCompare)
+      return next(createError(400, "incorrect password or username"));
+
+    const token = jwt.sign(
+      {
+        id: user.rows[0].id,
+        isadmin: user.rows[0].isadmin,
+      },
+      process.env.JWT,
+      { expiresIn: "24h" }
+    );
+    const { password, ...otherDetails } = user.rows[0];
+
     res
-      .cookie("jwt", token, {
-        httpOnly: true,
-      })
+      .cookie("jwt", token, { httpOnly: true })
       .status(200)
-      .json({ ...others });
+      .json({ ...otherDetails });
   } catch (error) {
     next(createError(401, "invalid cridentials", error.stack));
   }
