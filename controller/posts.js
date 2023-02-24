@@ -48,7 +48,7 @@ const addPosts = async (req, res) => {
 };
 
 const deletePosts = async (req, res) => {
-  const token = req.cookies.jwt;
+  const token = req.cookies.access_token;
   console.log(token);
   if (!token) return res.status(401).json("Not auntenticated");
 
