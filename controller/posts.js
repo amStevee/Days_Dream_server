@@ -56,7 +56,7 @@ const deletePosts = async (req, res) => {
     if (err) return res.status(403).json({ msg: "token not valid" });
 
     const postId = req.params.id;
-    console.log(data);
+
     const q = "DELETE FROM posts WHERE id = $1 AND userid = $2";
     await pool.query(q, [postId, data.id], (err, qdata) => {
       if (err) {
