@@ -16,15 +16,15 @@ let dir = path.join(__dirname, "uploads");
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(cors());
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requsted-With, Content-Type, Accept"
-//   );
-//   res.header("Access-Control-Allow-Credentials", true);
-//   next();
-// });
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://daydreamblog.netlify.app"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(dir));
