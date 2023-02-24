@@ -60,6 +60,7 @@ const login = async (req, res, next) => {
     if (!cPassword) {
       return res.status(400).json({ msg: "incorrect username or password" });
     }
+    console.log(isUser.rows[0].userid);
     const token = jwt.sign({ id: isUser.rows[0].userid }, process.env.JWTHASH, {
       expiresIn: "24h",
     });
