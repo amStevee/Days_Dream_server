@@ -68,7 +68,7 @@ const deletePosts = async (req, res) => {
 };
 
 const updatePosts = async (req, res) => {
-  const token = req.cookies.jwt;
+  const token = req.cookies.access_token;
   const { userid, title, description, category, image } = req.body;
   if (!token) return res.status(401).json("Not auntenticated");
 
