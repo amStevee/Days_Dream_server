@@ -41,6 +41,7 @@ const register = (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
+  let cook = req.cookies.access_token;
   const q = "SELECT * FROM users WHERE username = $1";
   try {
     const isUser = await pool.query(q, [req.body.username]);
@@ -65,10 +66,15 @@ const login = async (req, res, next) => {
     });
     const { password, ...others } = isUser.rows[0];
 
-    return res
-      .cookie("access_token", token, { httpOnly: true })
-      .status(200)
-      .json({ ...others });
+    if (cook === null || undefined) {
+      res
+        .cookie("access_token", token, { httpOnly: true })
+        .status(200)
+        .json({ ...others });
+    } else {
+      console.log("cookie exists", cook);
+    }
+    next();
   } catch (error) {
     next(createError(401, "invalid cridentials", error.stack));
   }

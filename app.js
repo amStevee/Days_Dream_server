@@ -1,10 +1,11 @@
 const morgan = require("morgan");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const path = require("path");
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
-const cookieParser = require("cookie-parser");
+app.use(cookieParser(process.env.JWTHASH));
 const multer = require("multer");
 const auths = require("./routes/auth");
 const users = require("./routes/users");
@@ -14,7 +15,6 @@ dotenv.config();
 let dir = path.join(__dirname, "uploads");
 
 app.use(morgan("dev"));
-app.use(cookieParser(process.env.JWTHASH));
 app.use(cors());
 app.use((req, res, next) => {
   res.setHeader(
