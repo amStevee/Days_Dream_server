@@ -14,20 +14,15 @@ dotenv.config();
 let dir = path.join(__dirname, "uploads");
 
 app.use(morgan("dev"));
-const corsOptions = {
-  origin: "https://daydreamblog.netlify.app",
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
-// app.use((req, res, next) => {
-//   res.setHeader(
-//     "Access-Control-Allow-Origin",
-//     "https://daydreamblog.netlify.app"
-//   );
-//   res.setHeader("Access-Control-Allow-Credentials", "true");
-//   next();
-// });
+app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://daydreamblog.netlify.app"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
 app.use(cookieParser(process.env.JWTHASH));
 
 app.use(express.json());
