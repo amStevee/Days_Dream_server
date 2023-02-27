@@ -1,8 +1,9 @@
 const morgan = require("morgan");
-const cors = require("cors");
+const express = require("express");
 const cookieParser = require("cookie-parser");
 const path = require("path");
-const express = require("express");
+const rateLimit = require("express-rate-limit");
+const cors = require("cors");
 const app = express();
 const dotenv = require("dotenv");
 const multer = require("multer");
@@ -24,6 +25,11 @@ app.use((req, res, next) => {
   next();
 });
 app.use(cookieParser(process.env.JWTHASH));
+const limiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5, // max requests
+  message: "Too many requests to this endpoint. Please try again later.",
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
