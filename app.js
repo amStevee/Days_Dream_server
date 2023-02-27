@@ -5,7 +5,6 @@ const path = require("path");
 const express = require("express");
 const app = express();
 const dotenv = require("dotenv");
-app.use(cookieParser(process.env.JWTHASH));
 const multer = require("multer");
 const auths = require("./routes/auth");
 const users = require("./routes/users");
@@ -24,6 +23,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");
   next();
 });
+app.use(cookieParser(process.env.JWTHASH));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
