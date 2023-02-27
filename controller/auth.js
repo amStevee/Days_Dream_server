@@ -67,7 +67,7 @@ const login = async (req, res, next) => {
     const { password, ...others } = isUser.rows[0];
 
     if (cook === null || undefined) {
-      res
+      return res
         .cookie("access_token", token, { httpOnly: true })
         .status(200)
         .json({ ...others });
