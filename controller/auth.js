@@ -42,6 +42,7 @@ const register = (req, res, next) => {
 
 const login = async (req, res, next) => {
   const q = "SELECT * FROM users WHERE username = $1";
+  console.log(req.body);
   try {
     const isUser = await pool.query(q, [req.body.username]);
 
