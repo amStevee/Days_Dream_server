@@ -47,8 +47,31 @@ const addPosts = async (req, res) => {
   }
 };
 
+// app.delete("/posts/:id", async (req, res) => {
+//   const postId = req.params.id;
+//   const userId = req.body.userId; // assuming the user id is passed in the request body
+
+//   try {
+//     const { rows } = await pool.query(
+//       "SELECT user_id FROM posts WHERE id = $1",
+//       [postId]
+//     );
+//     const postUserId = rows[0].user_id;
+
+//     if (postUserId === userId) {
+//       await pool.query("DELETE FROM posts WHERE id = $1", [postId]);
+//       res.status(204).send(); // send 204 status code to indicate the resource has been successfully deleted
+//     } else {
+//       res.status(403).send("You are not authorized to delete this post");
+//     }
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });
+
 const deletePosts = async (req, res) => {
-  const token = req.cookies.access_token;
+  const token = req.cookies["access_token"];
   console.log(token);
   if (!token) return res.status(401).json("Not auntenticated");
 
