@@ -66,6 +66,7 @@ const login = async (req, res, next) => {
     });
     const { password, ...others } = isUser.rows[0];
 
+    res.header("Access-Control-Allow-Credentials", "true");
     res
       .cookie("access_token", token, { httpOnly: true })
       .status(200)
