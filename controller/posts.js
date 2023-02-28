@@ -90,7 +90,7 @@ const updatePosts = async (req, res) => {
   const postId = req.params.id;
 
   const q =
-    "UPDATE posts SET title = $1, description = $2, image = $3, userid = $4, category = $5 WHERE id = $6";
+    "UPDATE posts SET title = $1, description = $2, image = $3, category = $5 WHERE id = $6";
   pool.query(
     q,
     [title, description, image, userid, category, postId],
