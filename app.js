@@ -17,11 +17,17 @@ let dir = path.join(__dirname, "uploads");
 app.use(morgan("dev"));
 app.use(cors());
 app.use((req, res, next) => {
+  const url = req.headers.origin || "https://localhost:3000";
+  res.setHeader("Access-Control-Allow-Origin", url);
   res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://daydreamblog.netlify.app"
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type,Accept,Authorization"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+  );
   next();
 });
 app.use(cookieParser(process.env.JWTHASH));
