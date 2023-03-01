@@ -68,7 +68,11 @@ const login = async (req, res, next) => {
 
     res.header("Access-Control-Allow-Credentials", "true");
     res
-      .cookie("access_token", token, { httpOnly: true })
+      .cookie("access_token", token, {
+        httpOnly: false,
+        sameSite: "strict",
+        secure: true,
+      })
       .status(200)
       .json({ ...others });
 
