@@ -74,8 +74,8 @@ app.use((error, req, res, next) => {
   });
 });
 
-app.use("/api/v1/auth", auths);
-app.use("/api/v1/user", users);
+app.use("/api/v1/auth", limiter, auths);
+app.use("/api/v1/user", limiter, users);
 app.use("/api/v1/posts", posts);
 
 app.all("*", (req, res) => {
