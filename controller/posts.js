@@ -63,7 +63,7 @@ const deletePosts = async (req, res) => {
 
 const updatePosts = async (req, res) => {
   const { title, description, category, image, userid } = req.body;
-  const postId = req.params.edit;
+  const postId = req.params;
   console.log(userid);
   console.log(postId);
 
