@@ -65,6 +65,7 @@ const updatePosts = async (req, res) => {
   const { title, description, category, image, userid } = req.body;
   const postId = req.query.edit;
   console.log(postId);
+  console.log(postId);
 
   const q =
     "UPDATE posts SET title = $1, description = $2, image = $3, category = $4 WHERE id = $5 AND userid = $6";
