@@ -48,8 +48,9 @@ const addPosts = async (req, res) => {
 };
 
 const deletePosts = async (req, res) => {
-  console.log(req.body);
   const postId = req.params.id;
+  console.log(postId);
+  console.log(req.body.userid);
 
   const q = "DELETE FROM posts WHERE id = $1 AND userid = $2";
   pool.query(q, [postId, req.body.userid], (err, qdata) => {

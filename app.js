@@ -38,7 +38,7 @@ app.use(
 // });
 app.use(cookieParser(process.env.JWTHASH));
 const limiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
+  windowMs: 30 * 60 * 1000,
   max: 5, // max requests
   message: "Too many requests to this endpoint. Please try again later.",
 });
