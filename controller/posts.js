@@ -62,18 +62,22 @@ const deletePosts = async (req, res) => {
 };
 
 const updatePosts = async (req, res) => {
-  const { userid, title, description, category, image } = req.body;
+  const { title, description, category, image, userid } = req.body;
 
   const postId = Number(req.params.edit);
 
   const q =
-    "UPDATE posts SET title = $1, description = $2, image = $3, category = $4 WHERE id = $5";
-  pool.query(q, [title, description, image, category, postId], (err, qdata) => {
-    if (err) {
-      return res.status(400).json({ msg: "You can not update this post" });
+    "UPDATE posts SET title = $1, description = $2, image = $3, category = $4 WHERE id = $5 AND userid = $6";
+  pool.query(
+    q,
+    [title, description, image, category, postId, userid],
+    (err, qdata) => {
+      if (err) {
+        return res.status(400).json({ msg: "You can not update this post" });
+      }
+      res.status(200).json({ msg: "Post has been updated successfully" });
     }
-    res.status(200).json({ msg: "Post has been updated successfully" });
-  });
+  );
 };
 
 module.exports = { getPosts, getPost, addPosts, deletePosts, updatePosts };
