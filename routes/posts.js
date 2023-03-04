@@ -12,6 +12,6 @@ const router = express.Router();
 router.route("/").get(getPosts).post(addPosts);
 router.route("/:id").get(getPost);
 router.delete("/:id", verifyToken, deletePosts);
-router.put("/:id", verifyToken, updatePosts);
+router.put("/write/:id", verifyToken, updatePosts);
 
 module.exports = router;
