@@ -50,11 +50,11 @@ const addPosts = async (req, res) => {
 const deletePosts = async (req, res) => {
   const postId = req.params.id;
 
-  console.log("body: ", req.body);
+  console.log("body: ", req.query.uid);
   console.log("params: ", req.params);
 
   const q = "DELETE FROM posts WHERE id = $1 AND userid = $2";
-  pool.query(q, [postId, req.body.userid], (err, qdata) => {
+  pool.query(q, [postId, req.query.uid], (err, qdata) => {
     if (err) {
       return res.status(400).json({ msg: "You can not delete this post" });
     }
