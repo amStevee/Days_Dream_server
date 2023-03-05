@@ -48,8 +48,8 @@ const addPosts = async (req, res) => {
 };
 
 const deletePosts = async (req, res) => {
-  const postId = req.params.id;
-  console.log(postId);
+  const postId = req.query.edit;
+
   console.log(req.body.userid);
 
   const q = "DELETE FROM posts WHERE id = $1 AND userid = $2";
@@ -64,7 +64,6 @@ const deletePosts = async (req, res) => {
 const updatePosts = async (req, res) => {
   const { title, description, category, image, userid } = req.body;
   const postId = req.query.edit;
-  console.log(postId);
   console.log(postId);
 
   const q =
