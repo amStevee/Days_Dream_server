@@ -57,14 +57,16 @@ const deletePosts = async (req, res) => {
     if (err) {
       return res.status(400).json({ msg: "You can not delete this post" });
     }
-    res.status(200).json({ msg: "Post has been deleted successfully" });
+    if (qdata[0])
+      return res
+        .status(200)
+        .json({ msg: "Post has been deleted successfully" });
   });
 };
 
 const updatePosts = async (req, res) => {
   const { title, description, category, image, userid } = req.body;
   const postId = req.query.edit;
-  console.log(postId);
 
   const q =
     "UPDATE posts SET title = $1, description = $2, image = $3, category = $4 WHERE id = $5 AND userid = $6";
