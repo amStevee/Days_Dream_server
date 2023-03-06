@@ -58,10 +58,7 @@ const deletePosts = async (req, res) => {
     if (err) {
       return res.status(400).json({ msg: "You can not delete this post" });
     }
-    if (qdata[0])
-      return res
-        .status(200)
-        .json({ msg: "Post has been deleted successfully" });
+    res.status(200).json({ msg: "Post has been deleted successfully" });
   });
 };
 
