@@ -18,7 +18,7 @@ dotenv.config();
 app.use(morgan("dev"));
 app.use(
   cors({
-    origin: "https://daydreamblog.netlify.app",
+    origin: "*",
     credentials: true,
   })
 );
