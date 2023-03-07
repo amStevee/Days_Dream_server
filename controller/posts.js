@@ -1,28 +1,28 @@
 const pool = require("../pgconnect");
 const createError = require("../utils/error");
-const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 
 const getPosts = async (req, res, next) => {
+  const { page, limit } = req.query;
+  const offset = (page - 1) * limit;
   try {
     if (req.query.category) {
       const q = "SELECT * FROM posts WHERE category = $1";
-      await pool.query(q, [req.query.category], (err, data) => {
-        if (err) return res.status(500).json(err);
+      pool.query(q, [req.query.category], (err, data) => {
+        if (err) return res.status(500).json(err.message);
         //
         if (data) return res.status(200).json(data.rows);
       });
     } else {
-      const q = "SELECT * FROM posts";
-      await pool.query(q, (err, data) => {
-        if (err) return res.status(500).json(err);
-        //
-        if (data) return res.status(200).json(data.rows);
-      });
+      const q = "SELECT * FROM posts ORDER BY id LIMIT $1 OFFSET $2";
+      const { rows, rowCount } = await pool.query(q, [limit, offset]);
+
+      res.status(200).json({ rows, rowCount });
     }
   } catch (error) {
-    next(createError(401, "invalid cridentials", error.stack));
+    res.status(500).json({ message: error.message });
+    next(createError(401, "internal server err", error.stack));
   }
 };
 

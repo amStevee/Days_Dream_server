@@ -21,6 +21,12 @@ app.use(
     credentials: true,
   })
 );
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//     credentials: true,
+//   })
+// );
 // app.use((req, res, next) => {
 //   const url = req.headers.origin || "http://localhost:3000";
 
@@ -36,7 +42,7 @@ app.use(
 //   );
 //   next();
 // });
-app.use(cookieParser(process.env.JWTHASH));
+app.use(cookieParser());
 const limiter = rateLimit({
   windowMs: 30 * 60 * 1000,
   max: 5, // max requests
