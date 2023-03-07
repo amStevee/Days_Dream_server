@@ -7,7 +7,8 @@ const cors = require("cors");
 const app = express();
 const dotenv = require("dotenv");
 const multer = require("multer");
-const AWS = require("aws-sdk");
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { fromIni } = require("@aws-sdk/credential-provider-ini");
 const auths = require("./routes/auth");
 const users = require("./routes/users");
 const posts = require("./routes/posts");
@@ -55,10 +56,12 @@ app.use(
   express.static(`https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com`)
 );
 
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+const s3 = new S3Client({
   region: process.env.AWS_REGION,
+  credentials: fromIni({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  }),
 });
 
 const storage = multer.memoryStorage();
@@ -75,10 +78,12 @@ app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
   };
 
   try {
-    const data = await s3.upload(params).promise();
-    const imageUrl = data.Location;
+    const command = new PutObjectCommand(params);
+    const data = await s3.send(command);
+    const imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${originalname}`;
     res.send({ imageUrl });
   } catch (error) {
+    console.error(error);
     res.status(500).send("An error occurred while uploading the file");
   }
 });
