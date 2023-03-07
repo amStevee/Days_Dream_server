@@ -17,8 +17,8 @@ const getPosts = async (req, res, next) => {
     } else {
       const q = "SELECT * FROM posts ORDER BY id LIMIT $1 OFFSET $2";
       const { rows, rowCount } = await pool.query(q, [limit, offset]);
-
-      res.status(200).json({ rows, rowCount });
+      const totalPage = Math.ceil(rowCount / limit)
+      res.status(200).json({ rows, totalPage });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
