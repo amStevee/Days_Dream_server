@@ -16,12 +16,21 @@ const port = process.env.PORT || 3001;
 dotenv.config();
 
 app.use(morgan("dev"));
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
-);
+const whitelist = [
+  "https://daydreamblog.netlify.app",
+  "https://s3.console.aws.amazon.com",
+];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
 // app.use(
 //   cors({
 //     origin: "http://localhost:3000",
