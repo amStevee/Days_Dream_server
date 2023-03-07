@@ -7,12 +7,12 @@ const cors = require("cors");
 const app = express();
 const dotenv = require("dotenv");
 const multer = require("multer");
+const AWS = rerquire("aws-sdk");
 const auths = require("./routes/auth");
 const users = require("./routes/users");
 const posts = require("./routes/posts");
 const port = process.env.PORT || 3001;
 dotenv.config();
-let dir = path.join(__dirname, "uploads");
 
 app.use(morgan("dev"));
 app.use(
@@ -51,21 +51,36 @@ const limiter = rateLimit({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(dir));
+app.use(
+  express.static(`https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com`)
+);
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + file.originalname);
-  },
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
 });
+
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-app.post("/api/v1/upload", upload.single("file"), function (req, res) {
-  const file = req.file;
-  res.status(200).json(file.filename);
+app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
+  const { originalname, buffer } = req.file;
+
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: originalname,
+    Body: buffer,
+    ACL: "public-read",
+  };
+
+  try {
+    const data = await s3.upload(params).promise();
+    const imageUrl = data.Location;
+    res.send({ imageUrl });
+  } catch (error) {
+    res.status(500).send("An error occurred while uploading the file");
+  }
 });
 
 app.use((error, req, res, next) => {
