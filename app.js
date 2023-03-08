@@ -55,9 +55,7 @@ const limiter = rateLimit({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  express.static(`https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com`)
-);
+app.use("/api/v1/uploads", express.static("uploads"));
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
