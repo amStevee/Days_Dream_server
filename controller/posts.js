@@ -43,7 +43,7 @@ const getPostsAsid = async (req, res, next) => {
 const getPost = async (req, res) => {
   const pId = Number(req.params.id);
   const q =
-    "SELECT posts.id, username, title, description, user_image, posts.image, category, posts.created_at FROM users JOIN posts ON users.userid = posts.userid WHERE posts.id = $1";
+    "SELECT posts.id, username, title, description, users.user_image, posts.image, category, posts.created_at FROM posts JOIN users ON posts.userid = users.userid WHERE posts.id = $1";
   const { rows } = await pool.query(q, [pId]);
 
   res.status(200).json(rows[0]);
