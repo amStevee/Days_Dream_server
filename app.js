@@ -81,7 +81,7 @@ app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
   try {
     const data = await s3.upload(params).promise();
     const imageUrl = data.Location;
-    res.send({ imageUrl });
+    res.json({ imageUrl });
   } catch (error) {
     console.error(error);
     res.status(500).send("An error occurred while uploading the file");
@@ -98,7 +98,7 @@ app.get("/api/v1/upload/:imageName", async (req, res) => {
     const data = await s3.getObject(params).promise();
     res.setHeader("Content-Type", data.ContentType);
     console.log(data.Body);
-    res.send(data.Body);
+    res.json(data.Body);
   } catch (error) {
     console.error(error);
     res.status(500).send("An error occurred while retrieving the file");
