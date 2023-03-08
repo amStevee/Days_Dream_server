@@ -2,6 +2,7 @@ const express = require("express");
 const verifyToken = require("../utils/verifyToken");
 const {
   getPosts,
+  getPostsAsid,
   getPost,
   addPosts,
   deletePosts,
@@ -10,6 +11,7 @@ const {
 const router = express.Router();
 
 router.route("/").get(getPosts).post(addPosts);
+router.route("/aside").get(getPostsAsid);
 router.route("/:id").get(getPost);
 router.delete("/:id", deletePosts);
 router.put("/write", updatePosts);

@@ -87,20 +87,6 @@ app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-// app.use("/images", async (req, res, next) => {
-//   try {
-//     const params = {
-//       Bucket: process.env.AWS_BUCKET_NAME,
-//       Key: req.path.substring(1),
-//     };
-//     const s3Object = await s3.getObject(params).promise();
-//     res.setHeader("Content-Type", s3Object.ContentType);
-//     res.send(s3Object.Body);
-//   } catch (err) {
-//     next(err);
-//   }
-// });
-
 app.use((error, req, res, next) => {
   const errorStatus = error.status || 500;
   const errorMessage = `this is the unexpected field -> ${error.field}`;

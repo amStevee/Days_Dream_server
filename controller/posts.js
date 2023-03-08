@@ -17,12 +17,26 @@ const getPosts = async (req, res, next) => {
     } else {
       const q = "SELECT * FROM posts ORDER BY id LIMIT $1 OFFSET $2";
       const { rows, rowCount } = await pool.query(q, [limit, offset]);
-      const totalPage = Math.ceil(rowCount / limit)
+      const totalPage = Math.ceil(rowCount / limit);
       res.status(200).json({ rows, totalPage });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
     next(createError(401, "internal server err", error.stack));
+  }
+};
+
+const getPostsAsid = async (req, res, next) => {
+  const q =
+    "SELECT * FROM post WHERE category = $1 ORDER BY id LIMIT 6 OFFSET 1";
+  try {
+    pool.query(q, [req.query.category], (err, data) => {
+      if (err) return res.status(500).json({ msg: err.message });
+
+      return res.status(200).json(data.rows);
+    });
+  } catch (error) {
+    console.error(error.message);
   }
 };
 
@@ -77,4 +91,11 @@ const updatePosts = async (req, res) => {
   );
 };
 
-module.exports = { getPosts, getPost, addPosts, deletePosts, updatePosts };
+module.exports = {
+  getPosts,
+  getPostsAsid,
+  getPost,
+  addPosts,
+  deletePosts,
+  updatePosts,
+};
