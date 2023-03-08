@@ -88,19 +88,17 @@ app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-app.get("/api/v1/upload/:imageName", async (req, res) => {
-  const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
-    Key: req.params.imageName,
-  };
-
+app.use("/images", async (req, res, next) => {
   try {
-    const data = await s3.getObject(params).promise();
-    res.setHeader("Content-Type", data.ContentType);
-    res.json(data.Body);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("An error occurred while retrieving the file");
+    const params = {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: req.path.substring(1),
+    };
+    const s3Object = await s3.getObject(params).promise();
+    res.setHeader("Content-Type", s3Object.ContentType);
+    res.send(s3Object.Body);
+  } catch (err) {
+    next(err);
   }
 });
 
