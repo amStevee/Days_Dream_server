@@ -88,7 +88,7 @@ app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
   }
 });
 
-app.get("/api/v1/images/:imageName", async (req, res) => {
+app.get("/api/v1/upload/:imageName", async (req, res) => {
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: req.params.imageName,
@@ -97,6 +97,7 @@ app.get("/api/v1/images/:imageName", async (req, res) => {
   try {
     const data = await s3.getObject(params).promise();
     res.setHeader("Content-Type", data.ContentType);
+    console.log(data.body);
     res.send(data.Body);
   } catch (error) {
     console.error(error);
