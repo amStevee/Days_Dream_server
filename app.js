@@ -88,6 +88,22 @@ app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
   }
 });
 
+app.get("/api/v1/images/:imageName", async (req, res) => {
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: req.params.imageName,
+  };
+
+  try {
+    const data = await s3.getObject(params).promise();
+    res.setHeader("Content-Type", data.ContentType);
+    res.send(data.Body);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred while retrieving the file");
+  }
+});
+
 app.use((error, req, res, next) => {
   const errorStatus = error.status || 500;
   const errorMessage = `this is the unexpected field -> ${error.field}`;
