@@ -98,7 +98,7 @@ const updateUser = (req, res) => {
     const q = "UPDATE users SET username = $1 WHERE userid = $2";
     pool.query(q, [username, userid], (err, qdata) => {
       if (err) {
-        return res.status(400).json({ msg: "You can not update this user" });
+        return res.status(400).json({ msg: err.message });
       }
       res.status(200).json({ msg: "username has been updated successfully" });
     });
@@ -108,7 +108,7 @@ const updateUser = (req, res) => {
     const q = "UPDATE users SET email = $1 WHERE userid = $2";
     pool.query(q, [email, userid], (err, qdata) => {
       if (err) {
-        return res.status(400).json({ msg: "You can not update this user" });
+        return res.status(400).json({ msg: err.message });
       }
       res.status(200).json({ msg: "user email has been updated successfully" });
     });
@@ -118,7 +118,7 @@ const updateUser = (req, res) => {
     const q = "UPDATE users SET image = $1 WHERE userid = $2";
     pool.query(q, [image, userid], (err, qdata) => {
       if (err) {
-        return res.status(400).json({ msg: "You can not update this user" });
+        return res.status(400).json({ msg: err.message });
       }
       res
         .status(200)
