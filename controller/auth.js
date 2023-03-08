@@ -115,7 +115,7 @@ const updateUser = (req, res) => {
   }
 
   if (image) {
-    const q = "UPDATE users SET image = $1 WHERE userid = $2";
+    const q = "UPDATE users SET user_image = $1 WHERE userid = $2";
     pool.query(q, [image, userid], (err, qdata) => {
       if (err) {
         return res.status(400).json({ msg: err.message });
