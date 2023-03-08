@@ -28,7 +28,7 @@ const getPosts = async (req, res, next) => {
 
 const getPostsAsid = async (req, res, next) => {
   const q =
-    "SELECT * FROM post WHERE category = $1 ORDER BY id LIMIT 6 OFFSET 1";
+    "SELECT * FROM posts WHERE category = $1 ORDER BY id LIMIT 6 OFFSET 1";
   try {
     pool.query(q, [req.query.category], (err, data) => {
       if (err) return res.status(500).json({ msg: err.message });
