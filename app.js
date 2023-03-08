@@ -7,8 +7,7 @@ const cors = require("cors");
 const app = express();
 const dotenv = require("dotenv");
 const multer = require("multer");
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-const { fromIni } = require("@aws-sdk/credential-provider-ini");
+const AWS = require("aws-sdk");
 const auths = require("./routes/auth");
 const users = require("./routes/users");
 const posts = require("./routes/posts");
@@ -31,12 +30,7 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000",
-//     credentials: true,
-//   })
-// );
+
 // app.use((req, res, next) => {
 //   const url = req.headers.origin || "http://localhost:3000";
 
@@ -65,12 +59,10 @@ app.use(
   express.static(`https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com`)
 );
 
-const s3 = new S3Client({
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: "us-east-2",
-  credentials: fromIni({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  }),
 });
 
 const storage = multer.memoryStorage();
@@ -87,9 +79,8 @@ app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
   };
 
   try {
-    const command = new PutObjectCommand(params);
-    const data = await s3.send(command);
-    const imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${originalname}`;
+    const data = await s3.upload(params).promise();
+    const imageUrl = data.Location;
     res.send({ imageUrl });
   } catch (error) {
     console.error(error);
