@@ -97,7 +97,7 @@ app.get("/api/v1/upload/:imageName", async (req, res) => {
   try {
     const data = await s3.getObject(params).promise();
     res.setHeader("Content-Type", data.ContentType);
-    console.log(data.body);
+    console.log(data.Body);
     res.send(data.Body);
   } catch (error) {
     console.error(error);
