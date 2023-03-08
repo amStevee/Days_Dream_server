@@ -81,7 +81,7 @@ app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
   try {
     const data = await s3.upload(params).promise();
     const imageUrl = data.Location;
-    res.json({ imageUrl });
+    res.send(imageUrl.split("/")[2]);
   } catch (error) {
     console.error(error);
     res.status(500).send("An error occurred while uploading the file");
