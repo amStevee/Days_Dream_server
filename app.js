@@ -30,7 +30,7 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-
+app.use(cookieParser(process.env.JWTHASH));
 // app.use((req, res, next) => {
 //   const url = req.headers.origin || "http://localhost:3000";
 
@@ -46,7 +46,7 @@ app.use(cors(corsOptions));
 //   );
 //   next();
 // });
-app.use(cookieParser());
+
 const limiter = rateLimit({
   windowMs: 30 * 60 * 1000,
   max: 5, // max requests

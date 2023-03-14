@@ -35,6 +35,7 @@ const getPostsAsid = async (req, res, next) => {
       return res.status(200).json(data.rows);
     });
   } catch (error) {
+    
     console.error(error.message);
   }
 };
