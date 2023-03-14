@@ -31,7 +31,7 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-app.use(cookieParser(process.env.JWTHASH));
+app.use(cookieParser());
 // app.use((req, res, next) => {
 //   const url = req.headers.origin || "http://localhost:3000";
 
