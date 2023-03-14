@@ -74,10 +74,8 @@ const login = async (req, res, next) => {
       })
       .status(200)
       .json({ ...others });
-
-    next();
   } catch (error) {
-    next(createError(401, "invalid cridentials", error.stack));
+    return res.status(500).json({ msg: error.message });
   }
 };
 
