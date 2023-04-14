@@ -80,7 +80,7 @@ app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
   };
 
   try {
-    const data = await S3.upload(params);
+    const data = await s3.upload(params);
     const imageUrl = data.Location;
     const filename = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
     res.send(filename);
