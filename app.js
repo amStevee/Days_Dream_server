@@ -80,7 +80,14 @@ app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
   };
 
   try {
-    const data = s3.upload(params);
+    const data = await s3
+      .upload(params)
+      .on("httpUploadProgress", (progress) => {
+        console.log(
+          `Progress: ${progress.loaded} bytes of ${progress.total} bytes`
+        );
+      })
+      .promise();
     console.log(data);
     console.log(data.Location);
     const imageUrl = data.Location;
