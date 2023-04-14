@@ -1,14 +1,13 @@
 const morgan = require("morgan");
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const path = require("path");
+// const path = require("path");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 const app = express();
 const dotenv = require("dotenv");
 const multer = require("multer");
 const { S3 } = require("@aws-sdk/client-s3");
-// const AWS = require("aws-sdk");
 const auths = require("./routes/auth");
 const users = require("./routes/users");
 const posts = require("./routes/posts");
