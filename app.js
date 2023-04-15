@@ -1,14 +1,13 @@
 const morgan = require("morgan");
 const express = require("express");
 const cookieParser = require("cookie-parser");
-// const path = require("path");
+const path = require("path");
 const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 const app = express();
 const dotenv = require("dotenv");
 const multer = require("multer");
-// 
-const { S3 } = require("aws-sdk");
+const AWS = require("aws-sdk");
 const auths = require("./routes/auth");
 const users = require("./routes/users");
 const posts = require("./routes/posts");
@@ -59,12 +58,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1/uploads", express.static("uploads"));
 
-const s3 = new S3({
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: "us-east-2",
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
 });
 
 const storage = multer.memoryStorage();
@@ -81,16 +78,7 @@ app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
   };
 
   try {
-    const data = await s3
-      .upload(params)
-      .on("httpUploadProgress", (progress) => {
-        console.log(
-          `Progress: ${progress.loaded} bytes of ${progress.total} bytes`
-        );
-      })
-      .promise();
-    console.log(data);
-    console.log(data.Location);
+    const data = await s3.upload(params).promise();
     const imageUrl = data.Location;
     const filename = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
     res.send(filename);
