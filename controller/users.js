@@ -18,7 +18,7 @@ const makeUserAdmin = async (req, res) => {
    pool.query(q,[user], (err, data) => {
     if (err) res.status(401).json({ message: "You can't access this service" });
     try {
-      const qd = 'UPDATE users SET COLUMN isadmin = True WHERE id = $1'
+      const qd = 'UPDATE users SET isadmin = True WHERE id = $1'
       const {rows} = pool.query(qd, [id])
       res.status(200).json({message: 'success', rows})
       
