@@ -89,8 +89,7 @@ app.post("/api/v1/upload", upload.single("file"), async (req, res) => {
         );
       })
       .promise();
-    console.log(data);
-    console.log(data.Location);
+    
     const imageUrl = data.Location;
     const filename = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
     res.send(filename);
