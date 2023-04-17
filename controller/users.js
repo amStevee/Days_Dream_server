@@ -1,5 +1,16 @@
 const pool = require("../pgconnect");
 
+const getUsers = async (req, res) => {
+  const q = 'SELECT * FROM users'
+
+  try {
+    const {rows} = await pool.query(q)
+    res.status(200).json(rows)
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+}
+
 const makeUserAdmin = async (req, res) => {
   const {user} = req.params
   const {id} = req.body
@@ -19,4 +30,4 @@ const makeUserAdmin = async (req, res) => {
   
 };
 
-module.exports = { makeUserAdmin };
+module.exports = { makeUserAdmin, getUsers };

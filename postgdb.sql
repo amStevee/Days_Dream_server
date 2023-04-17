@@ -4,6 +4,7 @@ CREATE TABLE users (
     email VARCHAR(70) NOT NULL,
     password VARCHAR(255) NOT NULL,
     image VARCHAR(255),
+    isadmin BOOLEAN DEFAULT False,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
