@@ -28,10 +28,10 @@ const makeUserAdmin = async (req, res) => {
 };
 
 const removeUserAdmin = async (req, res) => {
-  const { user } = req.params;
+  const admin = "ab3cb566-2de6-447a-b747-0719c2d56425";
   const { id } = req.body;
   const q = "SELECT * FROM users WHERE userid = $1";
-  pool.query(q, [user], (err, data) => {
+  pool.query(q, [admin], (err, data) => {
     if (err) res.status(401).json({ message: "You can't access this service" });
     try {
       const qd = "UPDATE users SET isadmin = False WHERE userid = $1";
