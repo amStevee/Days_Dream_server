@@ -79,7 +79,8 @@ const login = async (req, res, next) => {
 
     res
       .cookie("access_token", token, options)
-      .status(200)
+
+      res
       .json({ ...others });
   } catch (error) {
     return res.status(500).json({ msg: error.message });
