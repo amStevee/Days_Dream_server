@@ -4,7 +4,6 @@ const {
   getUsers,
   removeUserAdmin,
 } = require("../controller/users");
-const verifyToken = require('../utils/verifyToken')
 const router = express.Router();
 
 router.get("/", getUsers);
