@@ -67,16 +67,15 @@ const login = async (req, res, next) => {
     const { password, ...others } = isUser.rows[0];
 
     const options = {
-      domain: 'https://daydreamblog.netlify.app',
       path: '/',
       httpOnly: true,
       sameSite: 'none',
       secure: true,
     };
 
-    // if (req.hostname != 'localhost') {
-    //   options.domain = req.hostname;
-    // }
+    if (req.hostname != 'localhost') {
+      options.domain = req.hostname;
+    }
 
     res
       .cookie("access_token", token, options)
