@@ -67,7 +67,9 @@ const login = async (req, res, next) => {
     const { password, ...others } = isUser.rows[0];
 
     const options = {
-      domain: req.hostname.includes('day-dream-server.onrender.com') ? '.day-dream-server.onrender.com' : undefined,
+      domain: req.hostname.includes('daydreamblog.netlify.app')
+        ? '.daydreamblog.netlify.app'
+        : undefined,
       path: '/',
       httpOnly: true,
       sameSite: 'none',
