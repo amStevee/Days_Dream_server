@@ -69,7 +69,7 @@ const login = async (req, res, next) => {
     const options = {
       path: '/',
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'none',
       secure: true,
     };
 
