@@ -8,14 +8,15 @@ const getPosts = async (req, res, next) => {
   const offset = (page - 1) * limit;
   try {
     if (req.query.category) {
-      const q = 'SELECT * FROM posts WHERE category = $1';
+      const q =
+        'SELECT * FROM posts WHERE category = $1 ORDER BY created_at';
       pool.query(q, [req.query.category], (err, data) => {
         if (err) return res.status(500).json(err.message);
         //
         if (data) return res.status(200).json(data.rows);
       });
     } else {
-      const q = 'SELECT * FROM posts ORDER BY id LIMIT $1 OFFSET $2';
+      const q = 'SELECT * FROM posts ORDER BY created_at LIMIT $1 OFFSET $2';
       const { rows, rowCount } = await pool.query(q, [limit, offset]);
       const totalPage = Math.ceil(rowCount / limit);
       res.status(200).json({ rows, totalPage });
