@@ -8,7 +8,7 @@ const verifyToken = require('../utils/verifyToken')
 const router = express.Router();
 
 router.get("/", getUsers);
-router.post("/", verifyToken, makeUserAdmin);
-router.put("/", verifyToken, removeUserAdmin);
+router.post("/", makeUserAdmin);
+router.put("/", removeUserAdmin);
 
 module.exports = router;
