@@ -4,10 +4,12 @@ const {
   getUsers,
   removeUserAdmin,
 } = require("../controller/users");
+// const { verify } = require('jsonwebtoken');
+const verifyToken = require('../utils/verifyToken')
 const router = express.Router();
 
-router.route("/").get(getUsers);
-router.route("/").post(makeUserAdmin);
-router.route("/").put(removeUserAdmin);
+router.get("/", getUsers);
+router.post("/", verifyToken, makeUserAdmin);
+router.put("/", verifyToken, removeUserAdmin);
 
 module.exports = router;
