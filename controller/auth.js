@@ -66,13 +66,19 @@ const login = async (req, res, next) => {
     });
     const { password, ...others } = isUser.rows[0];
 
+    const options = {
+      path: '/',
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: true,
+    };
+
+    if (req.hostname != 'localhost') {
+      options.domain = req.hostname;
+    }
+
     res
-      .cookie("access_token", token, {
-        path: '/',
-        httpOnly: false,
-        sameSite: "none",
-        secure: true,
-      })
+      .cookie("access_token", token, options)
       .status(200)
       .json({ ...others });
   } catch (error) {
